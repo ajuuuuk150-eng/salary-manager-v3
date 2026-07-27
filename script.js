@@ -1,8 +1,10 @@
-// ==========================
-// Salary Manager Pro V3
-// ==========================
+// ======================================
+// Salary Manager Pro v3
+// Bagian 1
+// Database & Fungsi Dasar
+// ======================================
 
-const TARIF = 44000;
+const TARIF_LEMBUR = 44000;
 
 const FAKTOR = {
   "1": 1.5,
@@ -11,71 +13,104 @@ const FAKTOR = {
   "4.5": 7.5
 };
 
-let db = JSON.parse(localStorage.getItem("salaryManagerV3")) || {
+// Database Local Storage
+let db = JSON.parse(localStorage.getItem("salaryManagerV3"));
 
-  gaji: [],
+if (!db) {
+  db = {
+    gaji: [],
+    lembur: [],
+    pengeluaran: []
+  };
+}
 
-  lembur: [],
+// Simpan Database
+function simpanDB() {
+  localStorage.setItem(
+    "salaryManagerV3",
+    JSON.stringify(db)
+  );
+}
 
-  pengeluaran: []
+// Format Rupiah
+function rupiah(nominal) {
+  return "Rp " + Number(nominal).toLocaleString("id-ID");
+}
 
-};
+// Bulan aktif
+let bulanAktif = "";
 
-function simpanDB(){
+function setBulanSekarang() {
 
-localStorage.setItem(
+  const d = new Date();
 
-"salaryManagerV3",
+  bulanAktif =
+    d.getFullYear() +
+    "-" +
+    String(d.getMonth() + 1).padStart(2, "0");
 
-JSON.stringify(db)
+  const filter =
+    document.getElementById("filterBulan");
 
-);
+  if (filter) {
+
+    filter.value = bulanAktif;
+
+    filter.onchange = function () {
+
+      bulanAktif = this.value;
+
+      refreshDashboard();
+
+    };
+
+  }
 
 }
 
-function rupiah(n){
+// Filter berdasarkan bulan
+function filterBulan(data) {
 
-return "Rp " +
+  return data.filter(function(item){
 
-Number(n).toLocaleString("id-ID");
+    return item.tanggal.startsWith(bulanAktif);
+
+  });
 
 }
 
+// Total Gaji
 function totalGaji(){
 
-return db.gaji.reduce(
+  return filterBulan(db.gaji)
 
-(a,b)=>a+b.nominal,
-
-0
-
-);
+  .reduce((a,b)=>a+b.nominal,0);
 
 }
 
+// Total Lembur
 function totalLembur(){
 
-return db.lembur.reduce(
+  return filterBulan(db.lembur)
 
-(a,b)=>a+b.nominal,
-
-0
-
-);
+  .reduce((a,b)=>a+b.nominal,0);
 
 }
 
+// Total Pengeluaran
 function totalKeluar(){
 
-return db.pengeluaran.reduce(
+  return filterBulan(db.pengeluaran)
 
-(a,b)=>a+b.nominal,
-
-0
-
-);
+  .reduce((a,b)=>a+b.nominal,0);
 
 }
+
+// ======================================
+// Salary Manager Pro v3
+// Bagian 2
+// Dashboard & Input Data
+// ======================================
 
 function refreshDashboard(){
 
@@ -85,37 +120,87 @@ const l=totalLembur();
 
 const k=totalKeluar();
 
-document.getElementById("gaji").innerHTML=
+document.getElementById("gaji").innerHTML=rupiah(g);
 
-rupiah(g);
+document.getElementById("lembur").innerHTML=rupiah(l);
 
-document.getElementById("lembur").innerHTML=
+document.getElementById("pengeluaran").innerHTML=rupiah(k);
 
-rupiah(l);
-
-document.getElementById("pengeluaran").innerHTML=
-
-rupiah(k);
-
-document.getElementById("saldo").innerHTML=
-
-rupiah(g+l-k);
+document.getElementById("saldo").innerHTML=rupiah(g+l-k);
 
 document.getElementById("transaksi").innerHTML=
 
-db.gaji.length+
+filterBulan(db.gaji).length+
 
-db.lembur.length+
+filterBulan(db.lembur).length+
 
-db.pengeluaran.length;
+filterBulan(db.pengeluaran).length;
 
 }
 
-const hari=new Date();
+function tambahGaji(tanggal,nominal){
+
+db.gaji.push({
+
+tanggal,
+
+nominal:Number(nominal)
+
+});
+
+simpanDB();
+
+refreshDashboard();
+
+}
+
+function tambahLembur(tanggal,jam){
+
+db.lembur.push({
+
+tanggal,
+
+jam,
+
+nominal:FAKTOR[jam]*TARIF_LEMBUR
+
+});
+
+simpanDB();
+
+refreshDashboard();
+
+}
+
+function tambahPengeluaran(tanggal,nama,nominal){
+
+db.pengeluaran.push({
+
+tanggal,
+
+nama,
+
+nominal:Number(nominal)
+
+});
+
+simpanDB();
+
+refreshDashboard();
+
+}
+
+function hariIni(){
+
+const d=new Date();
+
+return d.toISOString().split("T")[0];
+
+}
 
 document.getElementById("today").innerHTML=
 
-hari.toLocaleDateString(
+new Date().toLocaleDateString(
 
 "id-ID",
 
@@ -133,282 +218,85 @@ year:"numeric"
 
 );
 
-refreshDashboard();
+// ======================================
+// Salary Manager Pro V3
+// Bagian 3
+// Riwayat, Reset & Inisialisasi
+// ======================================
 
-function menuDashboard(){
+function tampilRiwayat(){
 
-document.getElementById("content").innerHTML=`
-<div class="card">
-<h2>Dashboard</h2>
-<p>Selamat datang di Salary Manager Pro.</p>
+let html="";
+
+filterBulan(db.gaji).forEach(item=>{
+
+html+=`
+<div class="riwayat">
+<b>💰 Gaji</b><br>
+📅 ${item.tanggal}<br>
+${rupiah(item.nominal)}
 </div>
 `;
-
-}
-
-function menuGaji(){
-
-document.getElementById("content").innerHTML=`
-
-<div class="card">
-
-<h2>Tambah Gaji</h2>
-
-<input type="date" id="tglGaji">
-
-<input type="number" id="nominalGaji" placeholder="Nominal Gaji">
-
-<button onclick="simpanGaji()">
-
-Simpan Gaji
-
-</button>
-
-</div>
-
-`;
-
-}
-
-function simpanGaji(){
-
-const tanggal=document.getElementById("tglGaji").value;
-
-const nominal=Number(document.getElementById("nominalGaji").value);
-
-if(!tanggal||nominal<=0){
-
-alert("Lengkapi data");
-
-return;
-
-}
-
-db.gaji.push({
-
-tanggal,
-
-nominal
 
 });
 
-simpanDB();
+filterBulan(db.lembur).forEach(item=>{
 
-refreshDashboard();
-
-alert("Gaji berhasil disimpan");
-
-menuDashboard();
-
-}
-
-function menuLembur(){
-
-document.getElementById("content").innerHTML=`
-
-<div class="card">
-
-<h2>Tambah Lembur</h2>
-
-<input type="date" id="tglLembur">
-
-<select id="jamLembur">
-
-<option value="1">1 Jam</option>
-
-<option value="1.5">1.5 Jam</option>
-
-<option value="3.5">3.5 Jam</option>
-
-<option value="4.5">4.5 Jam</option>
-
-</select>
-
-<button onclick="simpanLembur()">
-
-Simpan Lembur
-
-</button>
-
+html+=`
+<div class="riwayat">
+<b>🕒 Lembur ${item.jam} Jam</b><br>
+📅 ${item.tanggal}<br>
+${rupiah(item.nominal)}
 </div>
-
 `;
-
-}
-
-function simpanLembur(){
-
-const tanggal=document.getElementById("tglLembur").value;
-
-const jam=document.getElementById("jamLembur").value;
-
-if(!tanggal){
-
-alert("Pilih tanggal");
-
-return;
-
-}
-
-db.lembur.push({
-
-tanggal,
-
-jam,
-
-nominal:FAKTOR[jam]*TARIF
 
 });
 
-simpanDB();
+filterBulan(db.pengeluaran).forEach(item=>{
 
-refreshDashboard();
-
-alert("Lembur berhasil disimpan");
-
-menuDashboard();
-
-}
-
-menuDashboard();
-
-function menuPengeluaran(){
-
-document.getElementById("content").innerHTML=`
-
-<div class="card">
-
-<h2>Tambah Pengeluaran</h2>
-
-<input type="date" id="tglKeluar">
-
-<input type="text" id="namaKeluar" placeholder="Nama Pengeluaran">
-
-<input type="number" id="nominalKeluar" placeholder="Nominal">
-
-<button onclick="simpanPengeluaran()">
-
-Simpan Pengeluaran
-
-</button>
-
+html+=`
+<div class="riwayat">
+<b>💸 ${item.nama}</b><br>
+📅 ${item.tanggal}<br>
+${rupiah(item.nominal)}
 </div>
-
 `;
-
-}
-
-function simpanPengeluaran(){
-
-const tanggal=document.getElementById("tglKeluar").value;
-
-const nama=document.getElementById("namaKeluar").value;
-
-const nominal=Number(document.getElementById("nominalKeluar").value);
-
-if(!tanggal||nama==""||nominal<=0){
-
-alert("Lengkapi data");
-
-return;
-
-}
-
-db.pengeluaran.push({
-
-tanggal,
-
-nama,
-
-nominal
 
 });
 
-simpanDB();
+if(html==""){
+
+html=`
+<div class="card">
+
+Belum ada transaksi bulan ini.
+
+</div>
+`;
+
+}
+
+const content=document.getElementById("content");
+
+if(content){
+
+content.innerHTML=html;
+
+}
+
+}
+
+function refresh(){
 
 refreshDashboard();
 
-alert("Pengeluaran berhasil disimpan");
-
-menuDashboard();
-
-}
-
-function menuLaporan(){
-
-let html=`
-
-<div class="card">
-
-<h2>Laporan Bulan Ini</h2>
-
-<table>
-
-<tr>
-
-<td>Total Gaji</td>
-
-<td>${rupiah(totalGaji())}</td>
-
-</tr>
-
-<tr>
-
-<td>Total Lembur</td>
-
-<td>${rupiah(totalLembur())}</td>
-
-</tr>
-
-<tr>
-
-<td>Total Pengeluaran</td>
-
-<td>${rupiah(totalKeluar())}</td>
-
-</tr>
-
-<tr>
-
-<td><b>Total Saldo</b></td>
-
-<td><b>${rupiah(totalGaji()+totalLembur()-totalKeluar())}</b></td>
-
-</tr>
-
-</table>
-
-</div>
-
-`;
-
-document.getElementById("content").innerHTML=html;
-
-}
-
-function menuSetting(){
-
-document.getElementById("content").innerHTML=`
-
-<div class="card">
-
-<h2>Pengaturan</h2>
-
-<button onclick="resetSemua()">
-
-Reset Semua Data
-
-</button>
-
-</div>
-
-`;
+tampilRiwayat();
 
 }
 
 function resetSemua(){
 
-if(confirm("Hapus semua data?")){
+if(confirm("Yakin ingin menghapus semua data?")){
 
 db={
 
@@ -422,37 +310,14 @@ pengeluaran:[]
 
 simpanDB();
 
-refreshDashboard();
+refresh();
 
-menuDashboard();
-
-}
+alert("Semua data berhasil dihapus");
 
 }
 
-// =======================
-// Filter Bulan
-// =======================
-
-const filter = document.getElementById("filterBulan");
-
-const sekarang = new Date();
-
-filter.value =
-`${sekarang.getFullYear()}-${String(sekarang.getMonth()+1).padStart(2,"0")}`;
-
-filter.addEventListener("change",()=>{
-
-refreshDashboard();
-
-});
-
-function dataBulan(list){
-
-return list.filter(item=>{
-
-return item.tanggal.startsWith(filter.value);
-
-});
-
 }
+
+setBulanSekarang();
+
+refresh();
