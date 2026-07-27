@@ -134,3 +134,298 @@ year:"numeric"
 );
 
 refreshDashboard();
+
+function menuDashboard(){
+
+document.getElementById("content").innerHTML=`
+<div class="card">
+<h2>Dashboard</h2>
+<p>Selamat datang di Salary Manager Pro.</p>
+</div>
+`;
+
+}
+
+function menuGaji(){
+
+document.getElementById("content").innerHTML=`
+
+<div class="card">
+
+<h2>Tambah Gaji</h2>
+
+<input type="date" id="tglGaji">
+
+<input type="number" id="nominalGaji" placeholder="Nominal Gaji">
+
+<button onclick="simpanGaji()">
+
+Simpan Gaji
+
+</button>
+
+</div>
+
+`;
+
+}
+
+function simpanGaji(){
+
+const tanggal=document.getElementById("tglGaji").value;
+
+const nominal=Number(document.getElementById("nominalGaji").value);
+
+if(!tanggal||nominal<=0){
+
+alert("Lengkapi data");
+
+return;
+
+}
+
+db.gaji.push({
+
+tanggal,
+
+nominal
+
+});
+
+simpanDB();
+
+refreshDashboard();
+
+alert("Gaji berhasil disimpan");
+
+menuDashboard();
+
+}
+
+function menuLembur(){
+
+document.getElementById("content").innerHTML=`
+
+<div class="card">
+
+<h2>Tambah Lembur</h2>
+
+<input type="date" id="tglLembur">
+
+<select id="jamLembur">
+
+<option value="1">1 Jam</option>
+
+<option value="1.5">1.5 Jam</option>
+
+<option value="3.5">3.5 Jam</option>
+
+<option value="4.5">4.5 Jam</option>
+
+</select>
+
+<button onclick="simpanLembur()">
+
+Simpan Lembur
+
+</button>
+
+</div>
+
+`;
+
+}
+
+function simpanLembur(){
+
+const tanggal=document.getElementById("tglLembur").value;
+
+const jam=document.getElementById("jamLembur").value;
+
+if(!tanggal){
+
+alert("Pilih tanggal");
+
+return;
+
+}
+
+db.lembur.push({
+
+tanggal,
+
+jam,
+
+nominal:FAKTOR[jam]*TARIF
+
+});
+
+simpanDB();
+
+refreshDashboard();
+
+alert("Lembur berhasil disimpan");
+
+menuDashboard();
+
+}
+
+menuDashboard();
+
+function menuPengeluaran(){
+
+document.getElementById("content").innerHTML=`
+
+<div class="card">
+
+<h2>Tambah Pengeluaran</h2>
+
+<input type="date" id="tglKeluar">
+
+<input type="text" id="namaKeluar" placeholder="Nama Pengeluaran">
+
+<input type="number" id="nominalKeluar" placeholder="Nominal">
+
+<button onclick="simpanPengeluaran()">
+
+Simpan Pengeluaran
+
+</button>
+
+</div>
+
+`;
+
+}
+
+function simpanPengeluaran(){
+
+const tanggal=document.getElementById("tglKeluar").value;
+
+const nama=document.getElementById("namaKeluar").value;
+
+const nominal=Number(document.getElementById("nominalKeluar").value);
+
+if(!tanggal||nama==""||nominal<=0){
+
+alert("Lengkapi data");
+
+return;
+
+}
+
+db.pengeluaran.push({
+
+tanggal,
+
+nama,
+
+nominal
+
+});
+
+simpanDB();
+
+refreshDashboard();
+
+alert("Pengeluaran berhasil disimpan");
+
+menuDashboard();
+
+}
+
+function menuLaporan(){
+
+let html=`
+
+<div class="card">
+
+<h2>Laporan Bulan Ini</h2>
+
+<table>
+
+<tr>
+
+<td>Total Gaji</td>
+
+<td>${rupiah(totalGaji())}</td>
+
+</tr>
+
+<tr>
+
+<td>Total Lembur</td>
+
+<td>${rupiah(totalLembur())}</td>
+
+</tr>
+
+<tr>
+
+<td>Total Pengeluaran</td>
+
+<td>${rupiah(totalKeluar())}</td>
+
+</tr>
+
+<tr>
+
+<td><b>Total Saldo</b></td>
+
+<td><b>${rupiah(totalGaji()+totalLembur()-totalKeluar())}</b></td>
+
+</tr>
+
+</table>
+
+</div>
+
+`;
+
+document.getElementById("content").innerHTML=html;
+
+}
+
+function menuSetting(){
+
+document.getElementById("content").innerHTML=`
+
+<div class="card">
+
+<h2>Pengaturan</h2>
+
+<button onclick="resetSemua()">
+
+Reset Semua Data
+
+</button>
+
+</div>
+
+`;
+
+}
+
+function resetSemua(){
+
+if(confirm("Hapus semua data?")){
+
+db={
+
+gaji:[],
+
+lembur:[],
+
+pengeluaran:[]
+
+};
+
+simpanDB();
+
+refreshDashboard();
+
+menuDashboard();
+
+}
+
+}
