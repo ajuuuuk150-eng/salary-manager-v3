@@ -4,93 +4,79 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Salary Manager Pro V3</title>
+<title>Salary Manager Pro V4</title>
 
 <link rel="stylesheet" href="style.css">
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#1565C0">
+
+<link rel="apple-touch-icon" href="icon-192.png">
 
 </head>
 
 <body>
 
-<header>
+<header class="header">
 
 <h1>💰 Salary Manager Pro</h1>
 
-<p id="today"></p>
-
-<div class="filter">
-
-<label>Bulan</label>
-
-<input type="month" id="filterBulan">
-
-</div>
+<p id="bulanSekarang"></p>
 
 </header>
 
-<main>
-
-<div class="card saldo">
-
-<h3>Total Saldo</h3>
-
-<h1 id="saldo">Rp0</h1>
-
-</div>
-
-<div class="grid">
+<div class="dashboard">
 
 <div class="card">
 
-<p>💰 Gaji</p>
+<h3>Saldo</h3>
 
-<h2 id="gaji">Rp0</h2>
+<h2 id="saldo">Rp0</h2>
 
 </div>
 
 <div class="card">
 
-<p>🕒 Lembur</p>
+<h3>Gaji</h3>
 
-<h2 id="lembur">Rp0</h2>
-
-</div>
-
-<div class="card">
-
-<p>💸 Pengeluaran</p>
-
-<h2 id="pengeluaran">Rp0</h2>
+<h2 id="totalGaji">Rp0</h2>
 
 </div>
 
 <div class="card">
 
-<p>📊 Transaksi</p>
+<h3>Lembur</h3>
 
-<h2 id="transaksi">0</h2>
+<h2 id="totalLembur">Rp0</h2>
+
+</div>
+
+<div class="card">
+
+<h3>Pengeluaran</h3>
+
+<h2 id="totalKeluar">Rp0</h2>
 
 </div>
 
 </div>
 
-<div id="content"></div>
+<div id="halaman"></div>
 
-</main>
+<nav class="bottom-nav">
 
-<nav class="bottom">
+<button onclick="bukaMenu('home')">🏠</button>
 
-<button onclick="menuDashboard()">🏠</button>
+<button onclick="bukaMenu('gaji')">💰</button>
 
-<button onclick="menuGaji()">💰</button>
+<button onclick="bukaMenu('lembur')">🕒</button>
 
-<button onclick="menuLembur()">🕒</button>
+<button onclick="bukaMenu('pengeluaran')">💸</button>
 
-<button onclick="menuPengeluaran()">💸</button>
+<button onclick="bukaMenu('laporan')">📊</button>
 
-<button onclick="menuLaporan()">📊</button>
-
-<button onclick="menuSetting()">⚙️</button>
+<button onclick="bukaMenu('setting')">⚙️</button>
 
 </nav>
 
