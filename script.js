@@ -429,3 +429,30 @@ menuDashboard();
 }
 
 }
+
+// =======================
+// Filter Bulan
+// =======================
+
+const filter = document.getElementById("filterBulan");
+
+const sekarang = new Date();
+
+filter.value =
+`${sekarang.getFullYear()}-${String(sekarang.getMonth()+1).padStart(2,"0")}`;
+
+filter.addEventListener("change",()=>{
+
+refreshDashboard();
+
+});
+
+function dataBulan(list){
+
+return list.filter(item=>{
+
+return item.tanggal.startsWith(filter.value);
+
+});
+
+}
