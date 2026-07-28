@@ -83,7 +83,17 @@ content.innerHTML=`
 
 </div>
 
+<div class="card">
+
+<h3>📋 5 Transaksi Terakhir</h3>
+
+<div id="transaksiTerakhir"></div>
+
+</div>
+
 `;
+
+tampilTransaksiTerakhir();
 
 }
 
@@ -1107,5 +1117,87 @@ pdf.text("Total Pengeluaran : " + rupiah(totalKeluar),20,70);
 pdf.text("Saldo : " + rupiah(saldo),20,80);
 
 pdf.save("Laporan-Salary-Tracker.pdf");
+
+}
+
+function tampilTransaksiTerakhir(){
+
+const list=document.getElementById("transaksiTerakhir");
+
+if(!list) return;
+
+let semua=[];
+
+db.gaji.forEach(item=>{
+
+semua.push({
+
+jenis:"💰 Gaji",
+
+tanggal:item.tanggal,
+
+nominal:item.nominal,
+
+ket:item.ket
+
+});
+
+});
+
+db.lembur.forEach(item=>{
+
+semua.push({
+
+jenis:"🕒 Lembur",
+
+tanggal:item.tanggal,
+
+nominal:item.nominal,
+
+ket:item.jam+" Jam"
+
+});
+
+});
+
+db.pengeluaran.forEach(item=>{
+
+semua.push({
+
+jenis:"💸 "+item.kategori,
+
+tanggal:item.tanggal,
+
+nominal:-item.nominal,
+
+ket:item.ket
+
+});
+
+});
+
+semua.sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal));
+
+list.innerHTML="";
+
+semua.slice(0,5).forEach(item=>{
+
+list.innerHTML+=`
+
+<div class="transaksi">
+
+<b>${item.jenis}</b><br>
+
+📅 ${item.tanggal}<br>
+
+${rupiah(item.nominal)}<br>
+
+${item.ket}
+
+</div>
+
+`;
+
+});
 
 }
