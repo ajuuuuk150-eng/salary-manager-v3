@@ -217,6 +217,12 @@ Simpan Pengeluaran
 
 </button>
 
+<input
+type="text"
+id="cariKeluar"
+placeholder="🔍 Cari Pengeluaran..."
+onkeyup="tampilKeluar()">
+
 <div id="listKeluar"></div>
 
 </div>
@@ -617,7 +623,18 @@ if(!list) return;
 
 list.innerHTML="";
 
+const keyword =
+document.getElementById("cariKeluar")?.value.toLowerCase() || "";
+
 db.pengeluaran.forEach(item=>{
+
+if(
+   !item.kategori.toLowerCase().includes(keyword) &&
+   !item.ket.toLowerCase().includes(keyword) &&
+   !item.tanggal.includes(keyword)
+){
+   return;
+}
 
 list.innerHTML+=`
 
