@@ -241,6 +241,12 @@ Tampilkan Laporan
 
 <div id="hasilLaporan"></div>
 
+<div class="card">
+
+<h3>🥧 Grafik Pengeluaran</h3>
+
+<canvas id="piePengeluaran" height="250"></canvas>
+
 </div>
 
 `;
@@ -733,6 +739,10 @@ document.getElementById("hasilLaporan").innerHTML = `
 
 <canvas id="grafikLaporan" height="250"></canvas>
 
+<h3>📊 Pengeluaran per Kategori</h3>
+
+<canvas id="piePengeluaran" height="250"></canvas>
+
 </div>
 
 `;
@@ -792,6 +802,69 @@ display:false
 }
 
 }
+
+});
+
+// ===============================
+// PIE CHART PENGELUARAN
+// ===============================
+
+let kategori = {};
+
+db.pengeluaran.forEach(item => {
+
+  if (item.tanggal.startsWith(bulan)) {
+
+    if (!kategori[item.kategori]) {
+      kategori[item.kategori] = 0;
+    }
+
+    kategori[item.kategori] += Number(item.nominal);
+
+  }
+
+});
+
+new Chart(document.getElementById("piePengeluaran"), {
+
+  type: "pie",
+
+  data: {
+
+    labels: Object.keys(kategori),
+
+    datasets: [{
+
+      data: Object.values(kategori),
+
+      backgroundColor: [
+        "#4CAF50",
+        "#2196F3",
+        "#FFC107",
+        "#F44336",
+        "#9C27B0",
+        "#00BCD4"
+      ],
+
+      borderWidth: 1
+
+    }]
+
+  },
+
+  options: {
+
+    responsive: true,
+
+    plugins: {
+
+      legend: {
+        position: "bottom"
+      }
+
+    }
+
+  }
 
 });
 
