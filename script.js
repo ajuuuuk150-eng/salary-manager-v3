@@ -227,9 +227,19 @@ content.innerHTML=`
 
 <div class="card">
 
-<h2>📊 Laporan</h2>
+<h2>📊 Laporan Keuangan</h2>
 
-<p>Fitur laporan akan dibuat nanti.</p>
+<label>Bulan</label>
+
+<input type="month" id="filterBulan">
+
+<button onclick="buatLaporan()">
+
+Tampilkan Laporan
+
+</button>
+
+<div id="hasilLaporan"></div>
 
 </div>
 
@@ -622,5 +632,85 @@ db.pengeluaran=db.pengeluaran.filter(item=>item.id!==id);
 simpanDB();
 refreshDashboard();
 tampilKeluar();
+
+}
+
+function buatLaporan(){
+
+const bulan=document.getElementById("filterBulan").value;
+
+if(!bulan){
+
+alert("Pilih bulan");
+
+return;
+
+}
+
+const semua=[
+
+...db.gaji,
+
+...db.lembur,
+
+...db.pengeluaran
+
+];
+
+let totalGaji=0;
+let totalLembur=0;
+let totalKeluar=0;
+
+db.gaji.forEach(item=>{
+
+if(item.tanggal.startsWith(bulan)){
+
+totalGaji+=Number(item.nominal);
+
+}
+
+});
+
+db.lembur.forEach(item=>{
+
+if(item.tanggal.startsWith(bulan)){
+
+totalLembur+=Number(item.nominal);
+
+}
+
+});
+
+db.pengeluaran.forEach(item=>{
+
+if(item.tanggal.startsWith(bulan)){
+
+totalKeluar+=Number(item.nominal);
+
+}
+
+});
+
+const saldo=totalGaji+totalLembur-totalKeluar;
+
+document.getElementById("hasilLaporan").innerHTML=`
+
+<div class="card">
+
+<h3>📅 ${bulan}</h3>
+
+<p>💰 Gaji : ${rupiah(totalGaji)}</p>
+
+<p>🕒 Lembur : ${rupiah(totalLembur)}</p>
+
+<p>💸 Pengeluaran : ${rupiah(totalKeluar)}</p>
+
+<hr>
+
+<h2>💵 Saldo : ${rupiah(saldo)}</h2>
+
+</div>
+
+`;
 
 }
