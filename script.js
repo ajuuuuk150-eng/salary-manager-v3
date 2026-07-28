@@ -363,7 +363,16 @@ if(!list) return;
 
 list.innerHTML="";
 
+const keyword = document.getElementById("cariGaji")?.value.toLowerCase() || "";
+
 db.gaji.forEach(item=>{
+
+if(
+    !item.ket.toLowerCase().includes(keyword) &&
+    !item.tanggal.includes(keyword)
+){
+    return;
+}
 
 list.innerHTML+=`
 
