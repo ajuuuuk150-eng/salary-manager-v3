@@ -779,6 +779,12 @@ ${rupiah(saldo)} dari ${rupiah(db.target)}
 
 <canvas id="piePengeluaran" height="250"></canvas>
 
+<br><br>
+
+<h3>📈 Tren Saldo Bulanan</h3>
+
+<canvas id="grafikBulanan" height="250"></canvas>
+
 </div>
 
 `;
@@ -896,6 +902,84 @@ new Chart(document.getElementById("piePengeluaran"), {
 
       legend: {
         position: "bottom"
+      }
+
+    }
+
+  }
+
+});
+
+let dataBulanan = {};
+
+db.gaji.forEach(item => {
+
+  const bulanData = item.tanggal.substring(0,7);
+
+  if(!dataBulanan[bulanData]){
+    dataBulanan[bulanData] = 0;
+  }
+
+  dataBulanan[bulanData] += Number(item.nominal);
+
+});
+
+db.lembur.forEach(item => {
+
+  const bulanData = item.tanggal.substring(0,7);
+
+  if(!dataBulanan[bulanData]){
+    dataBulanan[bulanData] = 0;
+  }
+
+  dataBulanan[bulanData] += Number(item.nominal);
+
+});
+
+db.pengeluaran.forEach(item => {
+
+  const bulanData = item.tanggal.substring(0,7);
+
+  if(!dataBulanan[bulanData]){
+    dataBulanan[bulanData] = 0;
+  }
+
+  dataBulanan[bulanData] -= Number(item.nominal);
+
+});
+
+new Chart(document.getElementById("grafikBulanan"),{
+
+  type:"line",
+
+  data:{
+
+    labels:Object.keys(dataBulanan),
+
+    datasets:[{
+
+      label:"Saldo Bulanan",
+
+      data:Object.values(dataBulanan),
+
+      borderWidth:3,
+
+      fill:false,
+
+      tension:0.3
+
+    }]
+
+  },
+
+  options:{
+
+    responsive:true,
+
+    plugins:{
+
+      legend:{
+        display:true
       }
 
     }
