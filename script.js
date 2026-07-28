@@ -251,15 +251,21 @@ content.innerHTML=`
 
 <h2>📊 Laporan Keuangan</h2>
 
-<label>Bulan</label>
+<label>Dari Tanggal</label>
 
-<input type="month" id="filterBulan">
+<input type="date" id="tanggalAwal">
+
+<label>Sampai Tanggal</label>
+
+<input type="date" id="tanggalAkhir">
 
 <button onclick="buatLaporan()">
 
 📊 Tampilkan Laporan
 
 </button>
+
+<div id="hasilLaporan"></div>
 
 <button onclick="exportPDF()">
 
@@ -713,11 +719,13 @@ tampilKeluar();
 
 function buatLaporan(){
 
-const bulan=document.getElementById("filterBulan").value;
+const awal = document.getElementById("tanggalAwal").value;
 
-if(!bulan){
+const akhir = document.getElementById("tanggalAkhir").value;
 
-alert("Pilih bulan");
+if(!awal || !akhir){
+
+alert("Pilih tanggal terlebih dahulu");
 
 return;
 
