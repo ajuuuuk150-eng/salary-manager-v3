@@ -177,11 +177,47 @@ content.innerHTML=`
 
 <h2>💸 Pengeluaran</h2>
 
-<p>Menu pengeluaran akan kita buat pada tahap berikutnya.</p>
+<input type="date" id="keluarTanggal">
+
+<select id="keluarKategori">
+
+<option value="Makan">🍜 Makan</option>
+
+<option value="Transport">🚌 Transport</option>
+
+<option value="BBM">⛽ BBM</option>
+
+<option value="Belanja">🛒 Belanja</option>
+
+<option value="Tagihan">📄 Tagihan</option>
+
+<option value="Lainnya">📦 Lainnya</option>
+
+</select>
+
+<input
+type="number"
+id="keluarNominal"
+placeholder="Nominal Pengeluaran">
+
+<input
+type="text"
+id="keluarKet"
+placeholder="Keterangan">
+
+<button onclick="simpanKeluar()">
+
+Simpan Pengeluaran
+
+</button>
+
+<div id="listKeluar"></div>
 
 </div>
 
 `;
+
+tampilKeluar();
 
 }
 
