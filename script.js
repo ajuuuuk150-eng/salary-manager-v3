@@ -247,7 +247,7 @@ Tampilkan Laporan
 
 }
 
-else{
+else if(menu==="setting"){
 
 content.innerHTML=`
 
@@ -255,9 +255,31 @@ content.innerHTML=`
 
 <h2>⚙️ Pengaturan</h2>
 
-<p>Fitur setting akan dibuat nanti.</p>
+<button onclick="setTarget()">
+🎯 Atur Target Tabungan
+</button>
+
+<button onclick="backupData()">
+💾 Backup Data
+</button>
+
+<button onclick="resetSemua()">
+🗑 Reset Semua Data
+</button>
+
+<div id="infoSetting"></div>
 
 </div>
+
+`;
+
+document.getElementById("infoSetting").innerHTML=`
+
+<p><b>Salary Tracker Pro</b></p>
+
+<p>Versi : V5.0</p>
+
+<p>Developer : Aziz Setiawan</p>
 
 `;
 
@@ -712,5 +734,62 @@ document.getElementById("hasilLaporan").innerHTML=`
 </div>
 
 `;
+
+}
+
+function setTarget(){
+
+const nilai=prompt("Masukkan target tabungan");
+
+if(nilai===null) return;
+
+db.target=Number(nilai);
+
+simpanDB();
+
+refreshDashboard();
+
+alert("Target berhasil disimpan");
+
+}
+
+function backupData(){
+
+const data=JSON.stringify(db,null,2);
+
+const blob=new Blob([data],{type:"application/json"});
+
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement("a");
+
+a.href=url;
+
+a.download="salary-backup.json";
+
+a.click();
+
+URL.revokeObjectURL(url);
+
+}
+
+function resetSemua(){
+
+if(!confirm("Yakin ingin menghapus semua data?")) return;
+
+db={
+gaji:[],
+lembur:[],
+pengeluaran:[],
+target:0
+};
+
+simpanDB();
+
+refreshDashboard();
+
+showPage("home");
+
+alert("Semua data berhasil dihapus");
 
 }
