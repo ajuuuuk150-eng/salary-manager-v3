@@ -4,6 +4,7 @@
 // ==========================
 
 // Database
+let editGajiId = null;
 let db = JSON.parse(localStorage.getItem("salaryTracker")) || {
   gaji: [],
   lembur: [],
@@ -132,11 +133,39 @@ content.innerHTML=`
 
 <h2>🕒 Input Lembur</h2>
 
-<p>Menu lembur akan kita buat pada tahap berikutnya.</p>
+<input type="date" id="lemburTanggal">
+
+<select id="lemburJam">
+
+<option value="1">1 Jam</option>
+
+<option value="1.5">1.5 Jam</option>
+
+<option value="3.5">3.5 Jam</option>
+
+<option value="4.5">4.5 Jam</option>
+
+</select>
+
+<input
+type="number"
+id="tarifLembur"
+value="44000"
+placeholder="Tarif per jam">
+
+<button onclick="simpanLembur()">
+
+Simpan Lembur
+
+</button>
+
+<div id="listLembur"></div>
 
 </div>
 
 `;
+
+tampilLembur();
 
 }
 
@@ -205,6 +234,31 @@ alert("Lengkapi data gaji");
 return;
 }
 
+if(editGajiId !== null){
+
+const index = db.gaji.findIndex(item => item.id === editGajiId);
+
+db.gaji[index] = {
+id: editGajiId,
+tanggal,
+nominal,
+ket
+};
+
+editGajiId = null;
+
+simpanDB();
+refreshDashboard();
+tampilGaji();
+
+document.getElementById("gajiTanggal").value="";
+document.getElementById("gajiNominal").value="";
+document.getElementById("gajiKet").value="";
+
+return;
+
+}
+  
 db.gaji.push({
 id:Date.now(),
 tanggal,
@@ -245,10 +299,12 @@ ${item.ket}
 
 <div class="aksi">
 
+<button onclick="editGaji(${item.id})">
+✏️ Edit
+</button>
+
 <button onclick="hapusGaji(${item.id})">
-
 🗑 Hapus
-
 </button>
 
 </div>
@@ -272,5 +328,144 @@ simpanDB();
 refreshDashboard();
 
 tampilGaji();
+
+}
+
+function editGaji(id){
+
+const data = db.gaji.find(item => item.id === id);
+
+if(!data) return;
+
+editGajiId = id;
+
+document.getElementById("gajiTanggal").value = data.tanggal;
+document.getElementById("gajiNominal").value = data.nominal;
+document.getElementById("gajiKet").value = data.ket;
+
+}
+
+let editLemburId = null;
+
+function simpanLembur(){
+
+const tanggal=document.getElementById("lemburTanggal").value;
+const jam=document.getElementById("lemburJam").value;
+const tarif=Number(document.getElementById("tarifLembur").value);
+
+if(!tanggal){
+alert("Pilih tanggal");
+return;
+}
+
+const faktor={
+"1":1.5,
+"1.5":2.5,
+"3.5":5.5,
+"4.5":7.5
+};
+
+const nominal=faktor[jam]*tarif;
+
+if(editLemburId!==null){
+
+const index=db.lembur.findIndex(x=>x.id===editLemburId);
+
+db.lembur[index]={
+id:editLemburId,
+tanggal,
+jam,
+nominal
+};
+
+editLemburId=null;
+
+}else{
+
+db.lembur.push({
+id:Date.now(),
+tanggal,
+jam,
+nominal
+});
+
+}
+
+simpanDB();
+
+refreshDashboard();
+
+tampilLembur();
+
+document.getElementById("lemburTanggal").value="";
+
+}
+
+function tampilLembur(){
+
+const list=document.getElementById("listLembur");
+
+if(!list) return;
+
+list.innerHTML="";
+
+db.lembur.forEach(item=>{
+
+list.innerHTML+=`
+
+<div class="transaksi">
+
+<b>🕒 Lembur</b><br>
+
+📅 ${item.tanggal}<br>
+
+⏰ ${item.jam} Jam<br>
+
+💰 ${rupiah(item.nominal)}
+
+<div class="aksi">
+
+<button onclick="editLembur(${item.id})">
+✏️ Edit
+</button>
+
+<button onclick="hapusLembur(${item.id})">
+🗑 Hapus
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+function editLembur(id){
+
+const data=db.lembur.find(item=>item.id===id);
+
+if(!data) return;
+
+editLemburId=id;
+
+document.getElementById("lemburTanggal").value=data.tanggal;
+document.getElementById("lemburJam").value=data.jam;
+
+}
+
+function hapusLembur(id){
+
+if(!confirm("Hapus lembur ini?")) return;
+
+db.lembur=db.lembur.filter(item=>item.id!==id);
+
+simpanDB();
+
+refreshDashboard();
+
+tampilLembur();
 
 }
