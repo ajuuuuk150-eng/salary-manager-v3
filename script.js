@@ -52,8 +52,142 @@ year:"numeric"
 
 // Menu
 function showPage(menu){
-  document.getElementById("content").innerHTML =
-  "<div class='card'><h2>"+menu.toUpperCase()+"</h2><p>Halaman sedang dibuat...</p></div>";
+
+const content=document.getElementById("content");
+
+if(menu==="home"){
+
+content.innerHTML=`
+
+<div class="card">
+
+<h2>🏠 Dashboard</h2>
+
+<p>Selamat datang di Salary Tracker Pro</p>
+
+</div>
+
+<div class="card">
+
+<h3>Ringkasan</h3>
+
+<p>💰 Total Gaji :
+<b id="homeGaji">${rupiah(totalData(db.gaji))}</b></p>
+
+<p>🕒 Total Lembur :
+<b id="homeLembur">${rupiah(totalData(db.lembur))}</b></p>
+
+<p>💸 Total Pengeluaran :
+<b id="homeKeluar">${rupiah(totalData(db.pengeluaran))}</b></p>
+
+</div>
+
+`;
+
+}
+
+else if(menu==="gaji"){
+
+content.innerHTML=`
+
+<div class="card">
+
+<h2>💰 Input Gaji</h2>
+
+<input
+type="date"
+id="gajiTanggal">
+
+<input
+type="number"
+id="gajiNominal"
+placeholder="Nominal Gaji">
+
+<input
+type="text"
+id="gajiKet"
+placeholder="Keterangan">
+
+<button onclick="simpanGaji()">
+
+Simpan Gaji
+
+</button>
+
+<div id="listGaji"></div>
+
+</div>
+
+`;
+
+tampilGaji();
+
+}
+
+else if(menu==="lembur"){
+
+content.innerHTML=`
+
+<div class="card">
+
+<h2>🕒 Input Lembur</h2>
+
+<p>Menu lembur akan kita buat pada tahap berikutnya.</p>
+
+</div>
+
+`;
+
+}
+
+else if(menu==="keluar"){
+
+content.innerHTML=`
+
+<div class="card">
+
+<h2>💸 Pengeluaran</h2>
+
+<p>Menu pengeluaran akan kita buat pada tahap berikutnya.</p>
+
+</div>
+
+`;
+
+}
+
+else if(menu==="laporan"){
+
+content.innerHTML=`
+
+<div class="card">
+
+<h2>📊 Laporan</h2>
+
+<p>Fitur laporan akan dibuat nanti.</p>
+
+</div>
+
+`;
+
+}
+
+else{
+
+content.innerHTML=`
+
+<div class="card">
+
+<h2>⚙️ Pengaturan</h2>
+
+<p>Fitur setting akan dibuat nanti.</p>
+
+</div>
+
+`;
+
+}
+
 }
 
 // Jalankan pertama kali
