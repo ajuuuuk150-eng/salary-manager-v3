@@ -4,83 +4,100 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Salary Manager Pro V4</title>
+<title>Salary Tracker Pro</title>
 
 <link rel="stylesheet" href="style.css">
 
-<link rel="manifest" href="manifest.json">
-
-<meta name="theme-color" content="#1565C0">
-
-<link rel="apple-touch-icon" href="icon-192.png">
-
 </head>
 
-<body>
+<nav class="bottomNav">
 
-<header class="header">
+<button onclick="showPage('home')">
+🏠
+<br>
+Home
+</button>
 
-<h1>💰 Salary Manager Pro</h1>
+<button onclick="showPage('gaji')">
+💰
+<br>
+Gaji
+</button>
 
-<p id="bulanSekarang"></p>
+<button onclick="showPage('lembur')">
+🕒
+<br>
+Lembur
+</button>
 
-</header>
+<button onclick="showPage('keluar')">
+💸
+<br>
+Keluar
+</button>
 
-<div class="dashboard">
+<button onclick="showPage('laporan')">
+📊
+<br>
+Laporan
+</button>
 
-<div class="card">
-
-<h3>Saldo</h3>
-
-<h2 id="saldo">Rp0</h2>
-
-</div>
-
-<div class="card">
-
-<h3>Gaji</h3>
-
-<h2 id="totalGaji">Rp0</h2>
-
-</div>
-
-<div class="card">
-
-<h3>Lembur</h3>
-
-<h2 id="totalLembur">Rp0</h2>
-
-</div>
-
-<div class="card">
-
-<h3>Pengeluaran</h3>
-
-<h2 id="totalKeluar">Rp0</h2>
-
-</div>
-
-</div>
-
-<div id="halaman"></div>
-
-<nav class="bottom-nav">
-
-<button onclick="bukaMenu('home')">🏠</button>
-
-<button onclick="bukaMenu('gaji')">💰</button>
-
-<button onclick="bukaMenu('lembur')">🕒</button>
-
-<button onclick="bukaMenu('pengeluaran')">💸</button>
-
-<button onclick="bukaMenu('laporan')">📊</button>
-
-<button onclick="bukaMenu('setting')">⚙️</button>
+<button onclick="showPage('setting')">
+⚙️
+<br>
+Setting
+</button>
 
 </nav>
 
 <script src="script.js"></script>
 
 </body>
-</html>
+</html>  
+
+<body>
+
+<header class="header">
+
+<h1>💰 Salary Tracker Pro</h1>
+
+<p id="today"></p>
+
+</header>
+
+<div class="dashboard">
+
+<div class="card saldo">
+<h3>Saldo Saat Ini</h3>
+<h2 id="saldo">Rp 0</h2>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h4>💰 Gaji</h4>
+<p id="totalGaji">Rp 0</p>
+</div>
+
+<div class="card">
+<h4>🕒 Lembur</h4>
+<p id="totalLembur">Rp 0</p>
+</div>
+
+<div class="card">
+<h4>💸 Pengeluaran</h4>
+<p id="totalKeluar">Rp 0</p>
+</div>
+
+<div class="card">
+<h4>🎯 Target</h4>
+<p id="target">Rp 0</p>
+</div>
+
+</div>
+
+</div>
+
+<main id="content">
+
+</main>
