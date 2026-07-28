@@ -739,7 +739,9 @@ document.getElementById("hasilLaporan").innerHTML = `
 
 <canvas id="grafikLaporan" height="250"></canvas>
 
-<h3>📊 Pengeluaran per Kategori</h3>
+<br><br>
+
+<h3>🥧 Pengeluaran per Kategori</h3>
 
 <canvas id="piePengeluaran" height="250"></canvas>
 
