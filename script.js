@@ -505,3 +505,122 @@ refreshDashboard();
 tampilLembur();
 
 }
+
+let editKeluarId = null;
+
+function simpanKeluar(){
+
+const tanggal=document.getElementById("keluarTanggal").value;
+const kategori=document.getElementById("keluarKategori").value;
+const nominal=Number(document.getElementById("keluarNominal").value);
+const ket=document.getElementById("keluarKet").value;
+
+if(!tanggal || nominal<=0){
+alert("Lengkapi data pengeluaran");
+return;
+}
+
+if(editKeluarId!==null){
+
+const index=db.pengeluaran.findIndex(x=>x.id===editKeluarId);
+
+db.pengeluaran[index]={
+id:editKeluarId,
+tanggal,
+kategori,
+nominal,
+ket
+};
+
+editKeluarId=null;
+
+}else{
+
+db.pengeluaran.push({
+id:Date.now(),
+tanggal,
+kategori,
+nominal,
+ket
+});
+
+}
+
+simpanDB();
+refreshDashboard();
+tampilKeluar();
+
+document.getElementById("keluarTanggal").value="";
+document.getElementById("keluarNominal").value="";
+document.getElementById("keluarKet").value="";
+
+}
+
+function tampilKeluar(){
+
+const list=document.getElementById("listKeluar");
+
+if(!list) return;
+
+list.innerHTML="";
+
+db.pengeluaran.forEach(item=>{
+
+list.innerHTML+=`
+
+<div class="transaksi">
+
+<b>💸 ${item.kategori}</b><br>
+
+📅 ${item.tanggal}<br>
+
+${rupiah(item.nominal)}<br>
+
+${item.ket}
+
+<div class="aksi">
+
+<button onclick="editKeluar(${item.id})">
+✏️ Edit
+</button>
+
+<button onclick="hapusKeluar(${item.id})">
+🗑 Hapus
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+function editKeluar(id){
+
+const data=db.pengeluaran.find(item=>item.id===id);
+
+if(!data) return;
+
+editKeluarId=id;
+
+document.getElementById("keluarTanggal").value=data.tanggal;
+document.getElementById("keluarKategori").value=data.kategori;
+document.getElementById("keluarNominal").value=data.nominal;
+document.getElementById("keluarKet").value=data.ket;
+
+}
+
+function hapusKeluar(id){
+
+if(!confirm("Hapus pengeluaran ini?")) return;
+
+db.pengeluaran=db.pengeluaran.filter(item=>item.id!==id);
+
+simpanDB();
+refreshDashboard();
+tampilKeluar();
+
+}
