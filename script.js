@@ -1,323 +1,148 @@
-// ======================================
-// Salary Manager Pro v3
-// Bagian 1
-// Database & Fungsi Dasar
-// ======================================
-
-const TARIF_LEMBUR = 44000;
-
-const FAKTOR = {
-  "1": 1.5,
-  "1.5": 2.5,
-  "3.5": 5.5,
-  "4.5": 7.5
-};
-
-// Database Local Storage
-let db = JSON.parse(localStorage.getItem("salaryManagerV3"));
-
-if (!db) {
-  db = {
-    gaji: [],
-    lembur: [],
-    pengeluaran: []
-  };
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
-// Simpan Database
-function simpanDB() {
-  localStorage.setItem(
-    "salaryManagerV3",
-    JSON.stringify(db)
-  );
+body{
+    background:#f4f6f9;
+    color:#222;
+    padding-bottom:90px;
 }
 
-// Format Rupiah
-function rupiah(nominal) {
-  return "Rp " + Number(nominal).toLocaleString("id-ID");
+.header{
+    background:#1565C0;
+    color:white;
+    padding:20px;
+    text-align:center;
+    border-radius:0 0 20px 20px;
+    box-shadow:0 3px 12px rgba(0,0,0,.2);
 }
 
-// Bulan aktif
-let bulanAktif = "";
-
-function setBulanSekarang() {
-
-  const d = new Date();
-
-  bulanAktif =
-    d.getFullYear() +
-    "-" +
-    String(d.getMonth() + 1).padStart(2, "0");
-
-  const filter =
-    document.getElementById("filterBulan");
-
-  if (filter) {
-
-    filter.value = bulanAktif;
-
-    filter.onchange = function () {
-
-      bulanAktif = this.value;
-
-      refreshDashboard();
-
-    };
-
-  }
-
+.header h1{
+    font-size:28px;
 }
 
-// Filter berdasarkan bulan
-function filterBulan(data) {
+.header p{
+    margin-top:8px;
+    opacity:.9;
+}
 
-  return data.filter(function(item){
+.dashboard{
+    padding:15px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
 
-    return item.tanggal.startsWith(bulanAktif);
+.card{
+    background:white;
+    border-radius:16px;
+    padding:16px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
 
-  });
+.card h3{
+    color:#666;
+    font-size:15px;
+}
+
+.card h2{
+    margin-top:10px;
+    color:#1565C0;
+}
+
+input,
+select,
+textarea{
+
+width:100%;
+
+padding:12px;
+
+margin-top:10px;
+
+border-radius:10px;
+
+border:1px solid #ccc;
+
+font-size:15px;
 
 }
 
-// Total Gaji
-function totalGaji(){
+button{
 
-  return filterBulan(db.gaji)
+width:100%;
 
-  .reduce((a,b)=>a+b.nominal,0);
+padding:12px;
 
-}
+margin-top:10px;
 
-// Total Lembur
-function totalLembur(){
+border:none;
 
-  return filterBulan(db.lembur)
+border-radius:10px;
 
-  .reduce((a,b)=>a+b.nominal,0);
+background:#1565C0;
 
-}
+color:white;
 
-// Total Pengeluaran
-function totalKeluar(){
+font-size:15px;
 
-  return filterBulan(db.pengeluaran)
+cursor:pointer;
 
-  .reduce((a,b)=>a+b.nominal,0);
+transition:.2s;
 
 }
 
-// ======================================
-// Salary Manager Pro v3
-// Bagian 2
-// Dashboard & Input Data
-// ======================================
+button:hover{
 
-function refreshDashboard(){
+transform:scale(.98);
 
-const g=totalGaji();
-
-const l=totalLembur();
-
-const k=totalKeluar();
-
-document.getElementById("gaji").innerHTML=rupiah(g);
-
-document.getElementById("lembur").innerHTML=rupiah(l);
-
-document.getElementById("pengeluaran").innerHTML=rupiah(k);
-
-document.getElementById("saldo").innerHTML=rupiah(g+l-k);
-
-document.getElementById("transaksi").innerHTML=
-
-filterBulan(db.gaji).length+
-
-filterBulan(db.lembur).length+
-
-filterBulan(db.pengeluaran).length;
+background:#0D47A1;
 
 }
 
-function tambahGaji(tanggal,nominal){
+.bottom-nav{
 
-db.gaji.push({
+position:fixed;
 
-tanggal,
+bottom:0;
 
-nominal:Number(nominal)
+left:0;
 
-});
+right:0;
 
-simpanDB();
+display:grid;
 
-refreshDashboard();
+grid-template-columns:repeat(6,1fr);
 
-}
+background:white;
 
-function tambahLembur(tanggal,jam){
+padding:10px;
 
-db.lembur.push({
-
-tanggal,
-
-jam,
-
-nominal:FAKTOR[jam]*TARIF_LEMBUR
-
-});
-
-simpanDB();
-
-refreshDashboard();
+box-shadow:0 -3px 10px rgba(0,0,0,.15);
 
 }
 
-function tambahPengeluaran(tanggal,nama,nominal){
+.bottom-nav button{
 
-db.pengeluaran.push({
+background:none;
 
-tanggal,
+color:#1565C0;
 
-nama,
+font-size:24px;
 
-nominal:Number(nominal)
+margin:0;
 
-});
-
-simpanDB();
-
-refreshDashboard();
+padding:10px;
 
 }
 
-function hariIni(){
+.bottom-nav button:hover{
 
-const d=new Date();
+background:#E3F2FD;
 
-return d.toISOString().split("T")[0];
-
-}
-
-document.getElementById("today").innerHTML=
-
-new Date().toLocaleDateString(
-
-"id-ID",
-
-{
-
-weekday:"long",
-
-day:"numeric",
-
-month:"long",
-
-year:"numeric"
+border-radius:10px;
 
 }
-
-);
-
-// ======================================
-// Salary Manager Pro V3
-// Bagian 3
-// Riwayat, Reset & Inisialisasi
-// ======================================
-
-function tampilRiwayat(){
-
-let html="";
-
-filterBulan(db.gaji).forEach(item=>{
-
-html+=`
-<div class="riwayat">
-<b>💰 Gaji</b><br>
-📅 ${item.tanggal}<br>
-${rupiah(item.nominal)}
-</div>
-`;
-
-});
-
-filterBulan(db.lembur).forEach(item=>{
-
-html+=`
-<div class="riwayat">
-<b>🕒 Lembur ${item.jam} Jam</b><br>
-📅 ${item.tanggal}<br>
-${rupiah(item.nominal)}
-</div>
-`;
-
-});
-
-filterBulan(db.pengeluaran).forEach(item=>{
-
-html+=`
-<div class="riwayat">
-<b>💸 ${item.nama}</b><br>
-📅 ${item.tanggal}<br>
-${rupiah(item.nominal)}
-</div>
-`;
-
-});
-
-if(html==""){
-
-html=`
-<div class="card">
-
-Belum ada transaksi bulan ini.
-
-</div>
-`;
-
-}
-
-const content=document.getElementById("content");
-
-if(content){
-
-content.innerHTML=html;
-
-}
-
-}
-
-function refresh(){
-
-refreshDashboard();
-
-tampilRiwayat();
-
-}
-
-function resetSemua(){
-
-if(confirm("Yakin ingin menghapus semua data?")){
-
-db={
-
-gaji:[],
-
-lembur:[],
-
-pengeluaran:[]
-
-};
-
-simpanDB();
-
-refresh();
-
-alert("Semua data berhasil dihapus");
-
-}
-
-}
-
-setBulanSekarang();
-
-refresh();
