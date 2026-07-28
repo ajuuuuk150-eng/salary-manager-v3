@@ -193,3 +193,84 @@ content.innerHTML=`
 // Jalankan pertama kali
 refreshDashboard();
 showPage("home");
+
+function simpanGaji(){
+
+const tanggal=document.getElementById("gajiTanggal").value;
+const nominal=Number(document.getElementById("gajiNominal").value);
+const ket=document.getElementById("gajiKet").value;
+
+if(!tanggal || nominal<=0){
+alert("Lengkapi data gaji");
+return;
+}
+
+db.gaji.push({
+id:Date.now(),
+tanggal,
+nominal,
+ket
+});
+
+simpanDB();
+refreshDashboard();
+tampilGaji();
+
+document.getElementById("gajiTanggal").value="";
+document.getElementById("gajiNominal").value="";
+document.getElementById("gajiKet").value="";
+}
+
+function tampilGaji(){
+
+const list=document.getElementById("listGaji");
+
+if(!list) return;
+
+list.innerHTML="";
+
+db.gaji.forEach(item=>{
+
+list.innerHTML+=`
+
+<div class="transaksi">
+
+<b>💰 Gaji</b><br>
+
+📅 ${item.tanggal}<br>
+
+${rupiah(item.nominal)}<br>
+
+${item.ket}
+
+<div class="aksi">
+
+<button onclick="hapusGaji(${item.id})">
+
+🗑 Hapus
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+function hapusGaji(id){
+
+if(!confirm("Hapus transaksi ini?")) return;
+
+db.gaji=db.gaji.filter(item=>item.id!==id);
+
+simpanDB();
+
+refreshDashboard();
+
+tampilGaji();
+
+}
