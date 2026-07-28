@@ -737,6 +737,40 @@ document.getElementById("hasilLaporan").innerHTML = `
 
 <h2>💵 Saldo : ${rupiah(saldo)}</h2>
 
+<div style="margin:20px 0">
+<h3>🎯 Progress Target Tabungan</h3>
+
+<div style="
+background:#ddd;
+height:25px;
+border-radius:30px;
+overflow:hidden;
+">
+
+<div style="
+width:${Math.min((saldo/db.target)*100,100)}%;
+height:25px;
+background:linear-gradient(to right,#4CAF50,#00C853);
+text-align:center;
+color:white;
+font-weight:bold;
+line-height:25px;
+">
+
+${db.target>0?((saldo/db.target)*100).toFixed(1):0}%
+
+</div>
+
+</div>
+
+<p style="margin-top:8px">
+
+${rupiah(saldo)} dari ${rupiah(db.target)}
+
+</p>
+
+</div>
+
 <canvas id="grafikLaporan" height="250"></canvas>
 
 <br><br>
