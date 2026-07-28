@@ -247,7 +247,13 @@ content.innerHTML=`
 
 <button onclick="buatLaporan()">
 
-Tampilkan Laporan
+📊 Tampilkan Laporan
+
+</button>
+
+<button onclick="exportPDF()">
+
+📄 Export PDF
 
 </button>
 
@@ -1076,5 +1082,30 @@ refreshDashboard();
 showPage("home");
 
 alert("Semua data berhasil dihapus");
+
+}
+
+function exportPDF(){
+
+const { jsPDF } = window.jspdf;
+
+const pdf = new jsPDF();
+
+const totalGaji = totalData(db.gaji);
+const totalLembur = totalData(db.lembur);
+const totalKeluar = totalData(db.pengeluaran);
+const saldo = totalGaji + totalLembur - totalKeluar;
+
+pdf.setFontSize(20);
+pdf.text("Salary Tracker Pro",20,20);
+
+pdf.setFontSize(12);
+pdf.text("Tanggal : " + new Date().toLocaleDateString("id-ID"),20,35);
+pdf.text("Total Gaji : " + rupiah(totalGaji),20,50);
+pdf.text("Total Lembur : " + rupiah(totalLembur),20,60);
+pdf.text("Total Pengeluaran : " + rupiah(totalKeluar),20,70);
+pdf.text("Saldo : " + rupiah(saldo),20,80);
+
+pdf.save("Laporan-Salary-Tracker.pdf");
 
 }
