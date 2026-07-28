@@ -715,7 +715,7 @@ totalKeluar+=Number(item.nominal);
 
 const saldo=totalGaji+totalLembur-totalKeluar;
 
-document.getElementById("hasilLaporan").innerHTML=`
+document.getElementById("hasilLaporan").innerHTML = `
 
 <div class="card">
 
@@ -731,9 +731,69 @@ document.getElementById("hasilLaporan").innerHTML=`
 
 <h2>💵 Saldo : ${rupiah(saldo)}</h2>
 
+<canvas id="grafikLaporan" height="250"></canvas>
+
 </div>
 
 `;
+
+new Chart(document.getElementById("grafikLaporan"),{
+
+type:"bar",
+
+data:{
+
+labels:["Gaji","Lembur","Pengeluaran","Saldo"],
+
+datasets:[{
+
+label:"Laporan Keuangan",
+
+data:[
+
+totalGaji,
+
+totalLembur,
+
+totalKeluar,
+
+saldo
+
+],
+
+backgroundColor:[
+
+"#4CAF50",
+
+"#2196F3",
+
+"#F44336",
+
+"#FFC107"
+
+]
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+plugins:{
+
+legend:{
+
+display:false
+
+}
+
+}
+
+}
+
+});
 
 }
 
