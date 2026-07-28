@@ -115,6 +115,12 @@ Simpan Gaji
 
 </button>
 
+<input
+type="text"
+id="cariGaji"
+placeholder="🔍 Cari Gaji..."
+onkeyup="tampilGaji()">
+
 <div id="listGaji"></div>
 
 </div>
