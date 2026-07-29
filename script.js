@@ -104,6 +104,43 @@ totalData(db.pengeluaran)
 
 </h1>
 
+<hr>
+
+<h3>🎯 Progress Target</h3>
+
+<div style="
+background:#ddd;
+height:25px;
+border-radius:30px;
+overflow:hidden;
+">
+
+<div style="
+width:${Math.min(((totalData(db.gaji)+totalData(db.lembur)-totalData(db.pengeluaran))/db.target)*100,100)}%;
+height:25px;
+background:#4CAF50;
+text-align:center;
+color:white;
+font-weight:bold;
+line-height:25px;
+">
+
+${db.target>0?(((totalData(db.gaji)+totalData(db.lembur)-totalData(db.pengeluaran))/db.target)*100).toFixed(1):0}%
+
+</div>
+
+</div>
+
+<p>
+
+${rupiah(totalData(db.gaji)+totalData(db.lembur)-totalData(db.pengeluaran))}
+
+dari
+
+${rupiah(db.target)}
+
+</p>
+
 </div>
 
 `;
