@@ -64,30 +64,45 @@ content.innerHTML=`
 
 <h2>🏠 Dashboard</h2>
 
-<p>Selamat datang di Salary Tracker Pro</p>
+<p>Selamat Datang 👋</p>
 
 </div>
 
 <div class="card">
 
-<h3>Ringkasan</h3>
+<h3>📊 Statistik Keuangan</h3>
 
-<p>💰 Total Gaji :
-<b id="homeGaji">${rupiah(totalData(db.gaji))}</b></p>
+<p>💰 Total Gaji</p>
 
-<p>🕒 Total Lembur :
-<b id="homeLembur">${rupiah(totalData(db.lembur))}</b></p>
+<h2>${rupiah(totalData(db.gaji))}</h2>
 
-<p>💸 Total Pengeluaran :
-<b id="homeKeluar">${rupiah(totalData(db.pengeluaran))}</b></p>
+<hr>
 
-</div>
+<p>🕒 Total Lembur</p>
 
-<div class="card">
+<h2>${rupiah(totalData(db.lembur))}</h2>
 
-<h3>📋 5 Transaksi Terakhir</h3>
+<hr>
 
-<div id="transaksiTerakhir"></div>
+<p>💸 Total Pengeluaran</p>
+
+<h2>${rupiah(totalData(db.pengeluaran))}</h2>
+
+<hr>
+
+<p>💵 Saldo Saat Ini</p>
+
+<h1 style="color:green">
+
+${rupiah(
+
+totalData(db.gaji)+
+totalData(db.lembur)-
+totalData(db.pengeluaran)
+
+)}
+
+</h1>
 
 </div>
 
