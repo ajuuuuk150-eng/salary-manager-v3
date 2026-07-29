@@ -161,7 +161,7 @@ ${rupiah(db.target)}
 
 `;
 
-tampilTransaksiTerakhir();
+tampilTransaksiTerbaru();
 
 tampilHariGajian();
 
@@ -1402,25 +1402,50 @@ ${rupiah(item.nominal)}
 
 function tampilHariGajian(){
 
-const el = document.getElementById("hariGajian");
+const el=document.getElementById("hariGajian");
 
 if(!el) return;
 
-const sekarang = new Date();
+const sekarang=new Date();
 
-let gajian = new Date(
-sekarang.getFullYear(),
-sekarang.getMonth(),
-26
-);
+let tahun=sekarang.getFullYear();
+let bulan=sekarang.getMonth();
+
+let gajian=new Date(tahun,bulan,26);
 
 if(sekarang.getDate()>26){
 
-gajian = new Date(
-sekarang.getFullYear(),
-sekarang.getMonth()+1,
-26
+gajian=new Date(tahun,bulan+1,26);
+
+}
+
+const selisih=Math.ceil(
+
+(gajian.getTime()-sekarang.getTime())/
+
+(1000*60*60*24)
+
 );
+
+if(selisih==0){
+
+el.innerHTML=`
+
+<h2>🎉 Hari Ini Gajian!</h2>
+
+`;
+
+}else{
+
+el.innerHTML=`
+
+<h2>${gajian.toLocaleDateString("id-ID")}</h2>
+
+<h3>⏳ ${selisih} Hari Lagi</h3>
+
+`;
+
+}
 
 }
 
