@@ -1189,31 +1189,6 @@ alert("Semua data berhasil dihapus");
 
 }
 
-function exportPDF(){
-
-const { jsPDF } = window.jspdf;
-
-const pdf = new jsPDF();
-
-const totalGaji = totalData(db.gaji);
-const totalLembur = totalData(db.lembur);
-const totalKeluar = totalData(db.pengeluaran);
-const saldo = totalGaji + totalLembur - totalKeluar;
-
-pdf.setFontSize(20);
-pdf.text("Salary Tracker Pro",20,20);
-
-pdf.setFontSize(12);
-pdf.text("Tanggal : " + new Date().toLocaleDateString("id-ID"),20,35);
-pdf.text("Total Gaji : " + rupiah(totalGaji),20,50);
-pdf.text("Total Lembur : " + rupiah(totalLembur),20,60);
-pdf.text("Total Pengeluaran : " + rupiah(totalKeluar),20,70);
-pdf.text("Saldo : " + rupiah(saldo),20,80);
-
-pdf.save("Laporan-Salary-Tracker.pdf");
-
-}
-
 function tampilTransaksiTerakhir(){
 
 const list=document.getElementById("transaksiTerakhir");
@@ -1450,32 +1425,6 @@ el.innerHTML=`
 <h2>${gajian.toLocaleDateString("id-ID")}</h2>
 
 <h3>⏳ ${selisih} Hari Lagi</h3>
-
-`;
-
-}
-
-}
-
-const selisih =
-Math.ceil(
-(gajian-sekarang)/
-(1000*60*60*24)
-);
-
-if(selisih<=0){
-
-el.innerHTML="🎉 Hari ini gajian!";
-
-}else{
-
-el.innerHTML=`
-
-<b>${gajian.toLocaleDateString("id-ID")}</b>
-
-<br><br>
-
-⏳ ${selisih} hari lagi
 
 `;
 
