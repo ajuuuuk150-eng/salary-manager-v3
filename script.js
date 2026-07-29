@@ -143,6 +143,14 @@ ${rupiah(db.target)}
 
 </div>
 
+<div class="card">
+
+<h3>📝 Transaksi Terbaru</h3>
+
+<div id="transaksiTerbaru"></div>
+
+</div>
+
 `;
 
 tampilTransaksiTerakhir();
@@ -1305,5 +1313,79 @@ ${isi}
 win.document.close();
 
 win.print();
+
+}
+
+function tampilTransaksiTerbaru(){
+
+const list=document.getElementById("transaksiTerbaru");
+
+if(!list) return;
+
+let semua=[];
+
+db.gaji.forEach(item=>{
+
+semua.push({
+
+jenis:"💰 Gaji",
+
+tanggal:item.tanggal,
+
+nominal:item.nominal
+
+});
+
+});
+
+db.lembur.forEach(item=>{
+
+semua.push({
+
+jenis:"🕒 Lembur",
+
+tanggal:item.tanggal,
+
+nominal:item.nominal
+
+});
+
+});
+
+db.pengeluaran.forEach(item=>{
+
+semua.push({
+
+jenis:"💸 "+item.kategori,
+
+tanggal:item.tanggal,
+
+nominal:item.nominal
+
+});
+
+});
+
+semua.sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal));
+
+list.innerHTML="";
+
+semua.slice(0,5).forEach(item=>{
+
+list.innerHTML+=`
+
+<div class="transaksi">
+
+<b>${item.jenis}</b><br>
+
+📅 ${item.tanggal}<br>
+
+${rupiah(item.nominal)}
+
+</div>
+
+`;
+
+});
 
 }
