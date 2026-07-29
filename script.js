@@ -747,7 +747,7 @@ let totalKeluar=0;
 
 db.gaji.forEach(item=>{
 
-if(item.tanggal.startsWith(bulan)){
+if(item.tanggal >= awal && item.tanggal <= akhir){
 
 totalGaji+=Number(item.nominal);
 
@@ -757,7 +757,7 @@ totalGaji+=Number(item.nominal);
 
 db.lembur.forEach(item=>{
 
-if(item.tanggal.startsWith(bulan)){
+if(item.tanggal >= awal && item.tanggal <= akhir){
 
 totalLembur+=Number(item.nominal);
 
@@ -767,7 +767,7 @@ totalLembur+=Number(item.nominal);
 
 db.pengeluaran.forEach(item=>{
 
-if(item.tanggal.startsWith(bulan)){
+if(item.tanggal >= awal && item.tanggal <= akhir){
 
 totalKeluar+=Number(item.nominal);
 
@@ -781,7 +781,7 @@ document.getElementById("hasilLaporan").innerHTML = `
 
 <div class="card">
 
-<h3>📅 ${bulan}</h3>
+<h3>📅 ${awal} s/d ${akhir}</h3>
 
 <p>💰 Gaji : ${rupiah(totalGaji)}</p>
 
