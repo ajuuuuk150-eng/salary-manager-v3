@@ -793,6 +793,14 @@ document.getElementById("hasilLaporan").innerHTML = `
 
 <h2>💵 Saldo : ${rupiah(saldo)}</h2>
 
+<br>
+
+<button onclick="exportPDF()">
+
+📄 Export PDF
+
+</button>
+
 <div style="margin:20px 0">
 <h3>🎯 Progress Target Tabungan</h3>
 
@@ -1207,5 +1215,43 @@ ${item.ket}
 `;
 
 });
+
+}
+
+function exportPDF(){
+
+const isi = document.getElementById("hasilLaporan").innerHTML;
+
+const win = window.open("", "_blank");
+
+win.document.write(`
+<html>
+<head>
+<title>Laporan Salary Tracker</title>
+
+<style>
+body{
+font-family:Arial;
+padding:20px;
+}
+h2,h3{
+color:#1565C0;
+}
+</style>
+
+</head>
+
+<body>
+
+${isi}
+
+</body>
+
+</html>
+`);
+
+win.document.close();
+
+win.print();
 
 }
