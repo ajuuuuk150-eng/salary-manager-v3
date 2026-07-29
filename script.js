@@ -3,6 +3,27 @@
 // Script Dasar
 // ==========================
 
+// Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import {
+getFirestore,
+doc,
+setDoc,
+getDoc
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDP_Sg8wIK-cI6-RkBzEvB0Ulw8YFy2EDM",
+authDomain: "salary-tracker-pro.firebaseapp.com",
+projectId: "salary-tracker-pro",
+storageBucket: "salary-tracker-pro.firebasestorage.app",
+messagingSenderId: "156409971793",
+appId: "1:156409971793:web:59a5b9432350d987dae470"
+};
+
+const app = initializeApp(firebaseConfig);
+const firestore = getFirestore(app);
+
 // Database
 let editGajiId = null;
 let db = JSON.parse(localStorage.getItem("salaryTracker")) || {
