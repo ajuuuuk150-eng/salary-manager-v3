@@ -151,9 +151,19 @@ ${rupiah(db.target)}
 
 </div>
 
+<div class="card">
+
+<h3>📅 Gajian Berikutnya</h3>
+
+<p id="hariGajian"></p>
+
+</div>
+
 `;
 
 tampilTransaksiTerakhir();
+
+tampilHariGajian();
 
 }
 
@@ -1387,5 +1397,55 @@ ${rupiah(item.nominal)}
 `;
 
 });
+
+}
+
+function tampilHariGajian(){
+
+const el = document.getElementById("hariGajian");
+
+if(!el) return;
+
+const sekarang = new Date();
+
+let gajian = new Date(
+sekarang.getFullYear(),
+sekarang.getMonth(),
+26
+);
+
+if(sekarang.getDate()>26){
+
+gajian = new Date(
+sekarang.getFullYear(),
+sekarang.getMonth()+1,
+26
+);
+
+}
+
+const selisih =
+Math.ceil(
+(gajian-sekarang)/
+(1000*60*60*24)
+);
+
+if(selisih<=0){
+
+el.innerHTML="🎉 Hari ini gajian!";
+
+}else{
+
+el.innerHTML=`
+
+<b>${gajian.toLocaleDateString("id-ID")}</b>
+
+<br><br>
+
+⏳ ${selisih} hari lagi
+
+`;
+
+}
 
 }
