@@ -138,3 +138,59 @@ button:active{
 .aksi button{
     flex:1;
 }
+
+/* ========================= */
+/* DARK MODE */
+/* ========================= */
+
+body.dark{
+    background:#121212;
+    color:#ffffff;
+}
+
+body.dark header{
+    background:#1f1f1f;
+    color:#ffffff;
+}
+
+body.dark nav{
+    background:#1f1f1f;
+}
+
+body.dark .card{
+    background:#1f1f1f;
+    color:#ffffff;
+    box-shadow:none;
+}
+
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark p,
+body.dark label,
+body.dark span{
+    color:#ffffff;
+}
+
+body.dark input,
+body.dark select,
+body.dark textarea{
+    background:#2b2b2b;
+    color:white;
+    border:1px solid #555;
+}
+
+body.dark button{
+    background:#4CAF50;
+    color:white;
+}
+
+body.dark .transaksi{
+    background:#2b2b2b;
+    color:white;
+    border:1px solid #555;
+}
+
+body.dark hr{
+    border-color:#555;
+}
