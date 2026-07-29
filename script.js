@@ -373,6 +373,10 @@ content.innerHTML=`
 💾 Backup Data
 </button>
 
+<button onclick="toggleDarkMode()">
+🌙 Dark Mode
+</button>
+
 <button onclick="resetSemua()">
 🗑 Reset Semua Data
 </button>
@@ -1175,6 +1179,10 @@ simpanDB();
 
 refreshDashboard();
 
+if(localStorage.getItem("darkMode")=="on"){
+    document.body.classList.add("dark");
+}
+
 showPage("home");
 
 alert("Semua data berhasil dihapus");
@@ -1470,6 +1478,22 @@ el.innerHTML=`
 ⏳ ${selisih} hari lagi
 
 `;
+
+}
+
+}
+
+function toggleDarkMode(){
+
+document.body.classList.toggle("dark");
+
+if(document.body.classList.contains("dark")){
+
+localStorage.setItem("darkMode","on");
+
+}else{
+
+localStorage.setItem("darkMode","off");
 
 }
 
