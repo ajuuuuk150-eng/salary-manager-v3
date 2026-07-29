@@ -403,6 +403,11 @@ document.getElementById("infoSetting").innerHTML=`
 
 // Jalankan pertama kali
 refreshDashboard();
+
+if(localStorage.getItem("darkMode")=="on"){
+    document.body.classList.add("dark");
+}
+
 showPage("home");
 
 function simpanGaji(){
